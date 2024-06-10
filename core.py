@@ -1,4 +1,6 @@
 from discord.fetch import *
+import discord.models.guild as guild
+import discord.models.channel as channel
 
 class Client:
     def __init__(self, token):
@@ -10,10 +12,18 @@ class Client:
         }
 
     def guilds(self):
-        return fetch_users_me_guilds(self.headers)
+        guild.guilds = []
+        data = fetch_users_me_guilds(self.headers)
+        for i in data:
+            guild.Guild(i)
+        return guild.guilds
     
     def channels(self, guild_id):
-        return fetch_guilds_id_channels(self.headers, guild_id)
+        channel.channels = []
+        data = fetch_guilds_id_channels(self.headers, guild_id)
+        for i in data:
+            channel.Channel(i)
+        return channel.channels
     
     def messages(self, channel_id, limit=50, before=None):
         return fetch_channels_id_messages(self.headers, channel_id, limit, before)
